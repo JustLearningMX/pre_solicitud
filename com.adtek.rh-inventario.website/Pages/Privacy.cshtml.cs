@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Globalization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace com.adtek.rh_inventario.website.Pages
@@ -14,6 +14,9 @@ namespace com.adtek.rh_inventario.website.Pages
 
         public void OnGet()
         {
+            string dateTime = DateTime.Now.ToString("d", new CultureInfo("es-MX"));
+            ViewData["TimeStamp"] = dateTime;
+
         }
     }
 
