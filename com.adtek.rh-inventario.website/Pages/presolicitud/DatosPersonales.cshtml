@@ -7,9 +7,52 @@
 
 <div class="card">
     <div class="card-header">
-        Datos Personales
-    </div>
+        <div class="row align-items-center">
+            <div class="col-md-12">
+                Datos Personales
+            </div>
+        </div>
+            
+        </div>
     <div class="card-body">
-        <p class="card-text">Aqui va el formulario.</p>
+        <form class="row g-3">
+            <div class="col-md-6">
+                <label for="name" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="name" placeholder="Introduce tu nombre">
+            </div>
+            <div class="col-md-6">
+                <label for="lastName1" class="form-label">Apellido Paterno</label>
+                <input type="text" class="form-control" id="lastName1" placeholder="Introduce tu apellido paterno">
+            </div>
+            <div class="col-md-6">
+                <label for="lastName2" class="form-label">Apellido Materno</label>
+                <input type="text" class="form-control" id="lastName2" placeholder="Introduce tu apellido materno">
+            </div>
+            <div class="col-md-6">
+                <label for="birthday" class="form-label">Fecha de Nacimiento</label>
+                <input type="date" class="form-control" id="birthday">
+            </div>
+            <div class="col-md-6">
+                <label for="nacionality" class="form-label">Nacionalidad</label>
+                <select id="nacionality" class="form-select">
+                    <option selected>Choose...</option>
+                    <option>Mexicana</option>
+                    <option>Otro</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="curp" class="form-label">CURP</label>
+                <input type="text" class="form-control" id="curp" placeholder="Introduce tu numero de CURP">
+            </div>
+            <div class="col-md-6">
+                <label for="ine" class="form-label">INE</label>
+                <input type="text" class="form-control" id="ine" placeholder="Introduce tu numero de INE">
+            </div>
+
+            <div class="col-md-12" style="display: flex; justify-content: center; gap: 2rem">
+                <button type="submit" class="btn btn-primary">Aceptar</button>
+                <button type="submit" class="btn btn-danger">Cancelar</button>
+            </div>
+        </form>
     </div>
 </div>
