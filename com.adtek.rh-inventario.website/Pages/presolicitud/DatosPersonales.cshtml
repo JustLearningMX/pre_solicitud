@@ -5,54 +5,67 @@
     ViewData["Title"] = "Datos Personales";
 }
 
-<div class="card">
-    <div class="card-header">
-        <div class="row align-items-center">
-            <div class="col-md-12">
-                Datos Personales
-            </div>
-        </div>
-            
-        </div>
-    <div class="card-body">
-        <form class="row g-3">
-            <div class="col-md-6">
-                <label for="name" class="form-label">Nombre</label>
-                <input type="text" class="form-control" id="name" placeholder="Introduce tu nombre">
-            </div>
-            <div class="col-md-6">
-                <label for="lastName1" class="form-label">Apellido Paterno</label>
-                <input type="text" class="form-control" id="lastName1" placeholder="Introduce tu apellido paterno">
-            </div>
-            <div class="col-md-6">
-                <label for="lastName2" class="form-label">Apellido Materno</label>
-                <input type="text" class="form-control" id="lastName2" placeholder="Introduce tu apellido materno">
-            </div>
-            <div class="col-md-6">
-                <label for="birthday" class="form-label">Fecha de Nacimiento</label>
-                <input type="date" class="form-control" id="birthday">
-            </div>
-            <div class="col-md-6">
-                <label for="nacionality" class="form-label">Nacionalidad</label>
-                <select id="nacionality" class="form-select">
-                    <option selected>Choose...</option>
-                    <option>Mexicana</option>
-                    <option>Otro</option>
-                </select>
-            </div>
-            <div class="col-md-6">
-                <label for="curp" class="form-label">CURP</label>
-                <input type="text" class="form-control" id="curp" placeholder="Introduce tu numero de CURP">
-            </div>
-            <div class="col-md-6">
-                <label for="ine" class="form-label">INE</label>
-                <input type="text" class="form-control" id="ine" placeholder="Introduce tu numero de INE">
-            </div>
+<form>
 
-            <div class="col-md-12" style="display: flex; justify-content: center; gap: 2rem">
-                <button type="submit" class="btn btn-primary">Aceptar</button>
-                <button type="submit" class="btn btn-danger">Cancelar</button>
+    <div class="card">
+        <div class="card-header">
+            <div class="row align-items-center">
+                <div class="col-6">
+                    Datos Personales
+                </div>
+                <div class="col-6 text-end">
+                    <button id="btnDPGuardar" type="button" class="btn btn-primary">Guardar</button>
+                    <button id="btnDPCancelar" type="reset" class="btn btn-danger">Cancelar</button>
+                </div>
             </div>
-        </form>
+                
+        </div>
+        <div class="card-body">
+            <div class="row">
+                
+                <label for="name" class="col-sm-12 col-lg-2 col-form-label">Nombre</label>
+                <div class="col-sm-12 col-lg-4 mb-2">
+                    <input type="text" class="form-control" id="name" placeholder="Introduce tu nombre">
+                </div>
+                
+                <label for="lastName1" class="col-sm-12 col-lg-2 col-form-label">Apellido Paterno</label>
+                <div class="col-sm-12 col-lg-4 mb-2">
+                    <input type="text" class="form-control" id="lastName1" placeholder="Introduce tu apellido paterno">
+                </div>
+                
+                <label for="lastName2" class="col-sm-12 col-lg-2 col-form-label">Apellido Materno</label>
+                <div class="col-sm-12 col-lg-4 mb-2">
+                    <input type="text" class="form-control" id="lastName2" placeholder="Introduce tu apellido materno">
+                </div>
+                
+                <label for="birthday" class="col-sm-12 col-lg-2 col-form-label">Fecha de Nacimiento</label>
+                <div class="col-sm-12 col-lg-4 mb-2">
+                    <input type="date" class="form-control" id="birthday">
+                </div>
+                
+                <label for="nacionality" class="col-sm-12 col-lg-2 col-form-label">Nacionalidad</label>
+                <div class="col-sm-12 col-lg-4 mb-2">
+                    <select id="nacionality" class="form-select">
+                        <option selected>Elige...</option>
+                        <option>Mexicana</option>
+                        <option>Extranjero</option>
+                    </select>
+                </div>
+                
+                <label for="curp" class="col-sm-12 col-lg-2 col-form-label">CURP</label>
+                <div class="col-sm-12 col-lg-4 mb-2">
+                    <input type="text" class="form-control" id="curp" placeholder="Introduce tu numero de CURP">
+                </div>
+                
+                <label for="ine" class="col-sm-12 col-lg-2 col-form-label">INE</label>
+                <div class="col-sm-12 col-lg-4 mb-2">
+                    <input type="text" class="form-control" id="ine" placeholder="Introduce tu numero de INE">
+                </div>
+
+            </div>
+        </div>
     </div>
-</div>
+
+</form>
+
+<script src="~/js/presolicitud/DatosPersonalesBM.js"></script>
