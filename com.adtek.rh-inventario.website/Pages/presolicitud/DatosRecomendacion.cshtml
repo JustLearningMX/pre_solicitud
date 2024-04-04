@@ -5,11 +5,109 @@
     ViewData["Title"] = "Datos De Recomendacion";
 }
 
-<div class="card">
-    <div class="card-header">
-        Datos De Recomendacion
+<form class="mt-4">
+
+    <div class="card">
+        <div class="card-header">
+            <div class="row align-items-center">
+                <div class="col-6">
+                    <p class="lead m-0"> Datos de Recomendacion </p>
+                </div>
+                <div class="col-6 text-end">
+                    <button id="btnDPGuardar" type="button" class="btn btn-primary">Guardar</button>
+                    <button id="btnDPCancelar" type="reset" class="btn btn-danger">Cancelar</button>
+                </div>
+            </div>
+
+        </div>
+        <div class="card-body">
+            <div class="row">
+
+                <label for="persona" class="col-lg-3 col-sm-12 col-form-label">Persona que recomienda</label>
+                <div class="col-lg-9 col-sm-12 mb-2">
+                    <input type="text" class="form-control" id="persona" placeholder="Nombre completo de la persona">
+                </div>
+
+                <label for="telContacto" class="col-lg-3 col-sm-12 col-form-label">Numero de contacto</label>
+                <div class="col-lg-9 col-sm-12 mb-2">
+                    <input type="tel" class="form-control" id="telContacto" placeholder="Numero a 10 digitos">
+                </div>
+                
+                <label for="tipoDeCarta" class="col-lg-3 col-sm-12 col-form-label">Tipo de carta</label>
+                <div class="col-lg-4 col-sm-12 mb-2">
+                    <select id="tipoDeCarta" class="form-select">
+                        <option selected>Elige...</option>
+                        <option>Personal</option>
+                        <option>Laboral</option>
+                    </select>
+                </div>
+                <div class="col-lg-5 col-sm-12"></div>
+
+                <label for="puesto" class="col-sm-12 col-lg-3 col-form-label">Puesto</label>
+                <div class="col-sm-12 col-lg-4 mb-2">
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        id="puesto" 
+                        placeholder="Introduce el puesto"
+                        disabled
+                    >
+                </div>
+
+                <label for="empresa" class="col-sm-12 col-lg-1 col-form-label">Empresa</label>
+                <div class="col-sm-12 col-lg-4 mb-2">
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        id="empresa" 
+                        placeholder="Introduce la empresa"
+                        disabled>
+                </div>
+                
+                <hr class="mt-3">
+
+                <div class="col text-end">
+                    <button id="btnDPGuardar" type="button" class="btn btn-success">Agregar</button>
+                </div>
+                
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Tipo</th>
+                        <th scope="col">Persona</th>
+                        <th scope="col">Contacto</th>
+                            <th scope="col">Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Laboral</td>
+                        <td>Juan Perez</td>
+                        <td>55 52 01 02 03</td>
+                        <td>
+                            <button type="button" class="btn btn-outline-secondary">Editar</button>
+                            <button type="button" class="btn btn-outline-danger">Eliminar</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>Personal</td>
+                        <td>Diana Lopez</td>
+                        <td>55 52 09 08 07</td>
+                        <td>
+                            <button type="button" class="btn btn-outline-secondary">Editar</button>
+                            <button type="button" class="btn btn-outline-danger">Eliminar</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
     </div>
-    <div class="card-body">
-        <p class="card-text">Aqui va el formulario.</p>
-    </div>
-</div>
+
+</form>
+
+<script src="~/js/presolicitud/DatosRecomendacionBM.js"></script>
