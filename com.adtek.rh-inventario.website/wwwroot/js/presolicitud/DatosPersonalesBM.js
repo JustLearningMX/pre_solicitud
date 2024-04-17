@@ -7,7 +7,14 @@ const datosPersonalesBM = {
     btnDPGuardar: document.getElementById('btnDPGuardar'),
 
     guardar: function () {
-        alert("Guardando Datos Personales BM");
+
+        var form = document.querySelector('.formDatosPersonales')
+
+        if (form.checkValidity()) {
+            console.log("Formulario Valido");
+        }
+
+        form.classList.add('was-validated');
     },
 
     cargarEventos: function () {
