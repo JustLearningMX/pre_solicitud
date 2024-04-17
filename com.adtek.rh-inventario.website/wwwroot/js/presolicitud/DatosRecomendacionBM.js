@@ -1,15 +1,43 @@
-﻿const tipoDeCarta = document.getElementById('tipoDeCarta');
-const inputPuesto = document.getElementById('puesto');
-const inputNombre = document.getElementById('empresa');
+﻿window.onload = function () {
+    datosRecomendacionBM.inicializar();
+}
 
-tipoDeCarta.addEventListener('change', function () {
-    let value = tipoDeCarta.value;
+const datosRecomendacionBM = {
 
-    if (value === 'Laboral') {
-        inputPuesto.disabled = false;
-        inputNombre.disabled = false;
-    } else {
-        inputPuesto.disabled = true;
-        inputNombre.disabled = true;
+    btnDRGuardar: document.getElementById('btnDRGuardar'),
+    tipoDeCarta: document.getElementById('tipoDeCarta'),
+    inputPuesto: document.getElementById('puesto'),
+    inputNombre: document.getElementById('empresa'),
+
+    guardar: function () {
+
+        var form = document.querySelector('.formDatosPersonales');
+
+        if (form.checkValidity()) {
+            console.log("Formulario Valido");
+        }
+
+        form.classList.add('was-validated');
+    },
+
+    habilitarCamposRecomendacionLaboral: function () {
+        let value = datosRecomendacionBM.tipoDeCarta.value;
+
+        if (value === '2') {
+            datosRecomendacionBM.inputPuesto.disabled = false;
+            datosRecomendacionBM.inputNombre.disabled = false;
+        } else {
+            datosRecomendacionBM.inputPuesto.disabled = true;
+            datosRecomendacionBM.inputNombre.disabled = true;
+        }
+    },
+
+    cargarEventos: function () {
+        datosRecomendacionBM.btnDRGuardar.onclick = datosRecomendacionBM.guardar;
+        datosRecomendacionBM.tipoDeCarta.onchange = datosRecomendacionBM.habilitarCamposRecomendacionLaboral;
+    },
+
+    inicializar: function () {
+        datosRecomendacionBM.cargarEventos();
     }
-});
+};
