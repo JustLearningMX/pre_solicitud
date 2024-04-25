@@ -3,26 +3,23 @@
 }
 
 const datosPersonalesBM = {
-
+    form: document.getElementById('formDatosPersonales'),
     btnDPGuardar: document.getElementById('btnDPGuardar'),
-    btnDPGuardar: document.getElementById('btnDPCancelar'),
+    btnDPCancelar: document.getElementById('btnDPCancelar'),
 
     guardar: function () {
 
-        var form = document.querySelector('.formDatosPersonales')
-
-        if (form.checkValidity()) {
+        if (datosPersonalesBM.form.checkValidity()) {
             console.log("Formulario Valido");
         }
 
-        form.classList.add('was-validated');
+        datosPersonalesBM.form.classList.add('was-validated');
     },
 
     cancelar: function () {
-
-        var form = document.querySelector('.formDatosPersonales');
-        form.classList.remove('was-validated');
-        form.reset();
+       
+        datosPersonalesBM.form.classList.remove('was-validated');
+        datosPersonalesBM.form.reset();
     },
 
     cargarEventos: function () {
