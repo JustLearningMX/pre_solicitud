@@ -1,6 +1,6 @@
-﻿window.onload = function () {
+﻿window.addEventListener("load", function () {
     datosPersonalesBM.inicializar();
-}
+});
 
 const datosPersonalesBM = {
     form: document.getElementById('formDatosPersonales'),
@@ -24,6 +24,7 @@ const datosPersonalesBM = {
 
     cargarEventos: function () {
         datosPersonalesBM.btnDPGuardar.onclick = datosPersonalesBM.guardar;
+        datosPersonalesBM.btnDPCancelar.onclick = datosPersonalesBM.cancelar;
     },
 
     inicializar: function () {
