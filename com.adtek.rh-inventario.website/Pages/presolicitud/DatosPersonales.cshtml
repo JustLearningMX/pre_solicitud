@@ -5,13 +5,13 @@
     ViewData["Title"] = "Datos Personales";
 }
 
-<form>
+<form id="formDatosPersonales" novalidate>
 
     <div class="card">
         <div class="card-header">
             <div class="row align-items-center">
                 <div class="col-6">
-                    Datos Personales
+                    <p class="lead m-0"> Datos de Personales </p>
                 </div>
                 <div class="col-6 text-end">
                     <button id="btnDPGuardar" type="button" class="btn btn-primary">Guardar</button>
@@ -25,12 +25,18 @@
                 
                 <label for="name" class="col-sm-12 col-lg-2 col-form-label">Nombre</label>
                 <div class="col-sm-12 col-lg-4 mb-2">
-                    <input type="text" class="form-control" id="name" placeholder="Introduce tu nombre">
+                    <input type="text" class="form-control" id="name" placeholder="Introduce tu nombre" required>
+                    <div class="invalid-feedback">
+                        El nombre es requerido.
+                    </div>
                 </div>
                 
                 <label for="lastName1" class="col-sm-12 col-lg-2 col-form-label">Apellido Paterno</label>
                 <div class="col-sm-12 col-lg-4 mb-2">
-                    <input type="text" class="form-control" id="lastName1" placeholder="Introduce tu apellido paterno">
+                    <input type="text" class="form-control" id="lastName1" placeholder="Introduce tu apellido paterno" required>
+                    <div class="invalid-feedback">
+                        El apellido paterno es requerido.
+                    </div>
                 </div>
                 
                 <label for="lastName2" class="col-sm-12 col-lg-2 col-form-label">Apellido Materno</label>
@@ -40,26 +46,40 @@
                 
                 <label for="birthday" class="col-sm-12 col-lg-2 col-form-label">Fecha de Nacimiento</label>
                 <div class="col-sm-12 col-lg-4 mb-2">
-                    <input type="date" class="form-control" id="birthday">
+                    <input type="date" class="form-control" id="birthday" required>
+                    <div class="invalid-feedback">
+                        La fecha de nacimiento es requerida.
+                    </div>
                 </div>
                 
                 <label for="nacionality" class="col-sm-12 col-lg-2 col-form-label">Nacionalidad</label>
                 <div class="col-sm-12 col-lg-4 mb-2">
-                    <select id="nacionality" class="form-select">
-                        <option selected>Elige...</option>
-                        <option>Mexicana</option>
-                        <option>Extranjero</option>
+                    <select id="nacionality" class="form-select" required>
+                        <option value="">Elige...</option>
+                        <option value="1">Mexicana</option>
+                        <option value="2">Extranjero</option>
                     </select>
+                    <div class="invalid-feedback">
+                        La nacionalidad es requerida.
+                    </div>
                 </div>
                 
                 <label for="curp" class="col-sm-12 col-lg-2 col-form-label">CURP</label>
                 <div class="col-sm-12 col-lg-4 mb-2">
-                    <input type="text" class="form-control" id="curp" placeholder="Introduce tu numero de CURP">
+                    <input type="text" class="form-control" id="curp" placeholder="Introduce tu numero de CURP" 
+                           pattern="^([A-Z][AEIOUX][A-Z]{2}\d{2}(?:0\d|1[0-2])(?:[0-2]\d|3[01])[HM](?:AS|B[CS]|C[CLMSH]|D[FG]|G[TR]|HG|JC|M[CNS]|N[ETL]|OC|PL|Q[TR]|S[PLR]|T[CSL]|VZ|YN|ZS)[B-DF-HJ-NP-TV-Z]{3}[A-Z\d])(\d)$"
+                           required>
+                    <div class="invalid-feedback">
+                        La CURP es requerida.
+                    </div>
                 </div>
                 
                 <label for="ine" class="col-sm-12 col-lg-2 col-form-label">INE</label>
                 <div class="col-sm-12 col-lg-4 mb-2">
-                    <input type="text" class="form-control" id="ine" placeholder="Introduce tu numero de INE">
+                    <input type="text" class="form-control" id="ine" placeholder="Introduce tu numero de INE" required>
+                    <div class="invalid-feedback">
+                        La INE es requerida.
+                    </div>
                 </div>
 
             </div>
@@ -68,4 +88,4 @@
 
 </form>
 
-<script src="~/js/presolicitud/DatosPersonalesBM.js"></script>
+<script src="~/js/presolicitud/DatosPersonalesBM.js" asp-append-version="true"></script>

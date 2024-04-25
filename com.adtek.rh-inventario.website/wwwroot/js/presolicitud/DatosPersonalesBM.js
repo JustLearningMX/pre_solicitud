@@ -3,11 +3,23 @@
 }
 
 const datosPersonalesBM = {
-
+    form: document.getElementById('formDatosPersonales'),
     btnDPGuardar: document.getElementById('btnDPGuardar'),
+    btnDPCancelar: document.getElementById('btnDPCancelar'),
 
     guardar: function () {
-        alert("Guardando Datos Personales BM");
+
+        if (datosPersonalesBM.form.checkValidity()) {
+            console.log("Formulario Valido");
+        }
+
+        datosPersonalesBM.form.classList.add('was-validated');
+    },
+
+    cancelar: function () {
+       
+        datosPersonalesBM.form.classList.remove('was-validated');
+        datosPersonalesBM.form.reset();
     },
 
     cargarEventos: function () {
