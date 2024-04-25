@@ -1,0 +1,6 @@
+@com.adtek.rh_inventario.webapi_HostAddress = http://localhost:5115
+
+GET {{com.adtek.rh_inventario.webapi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

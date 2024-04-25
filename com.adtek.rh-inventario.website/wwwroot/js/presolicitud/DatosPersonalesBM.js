@@ -5,6 +5,7 @@
 const datosPersonalesBM = {
 
     btnDPGuardar: document.getElementById('btnDPGuardar'),
+    btnDPGuardar: document.getElementById('btnDPCancelar'),
 
     guardar: function () {
 
@@ -15,6 +16,13 @@ const datosPersonalesBM = {
         }
 
         form.classList.add('was-validated');
+    },
+
+    cancelar: function () {
+
+        var form = document.querySelector('.formDatosPersonales');
+        form.classList.remove('was-validated');
+        form.reset();
     },
 
     cargarEventos: function () {
