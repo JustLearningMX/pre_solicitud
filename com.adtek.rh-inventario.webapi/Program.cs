@@ -1,4 +1,7 @@
 
+using com.adtek.rh_inventario.br.Models;
+using com.adtek.rh_inventario.br.Repository;
+using com.adtek.rh_inventario.br.Services;
 using com.adtek.rh_inventario.webapi.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,8 +18,20 @@ namespace com.adtek.rh_inventario.webapi
 
             builder.Services.AddControllers();
             builder.Services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
+            // builder.Services.AddDbContext<AdtekDBContext>(opt => opt.UseInMemoryDatabase("AdtekDB"));
+            builder.Services.AddDbContext<AdtekDBContext>(opt => opt.UseSqlServer( builder.Configuration.GetConnectionString("DefaultConnection"),
+                builder =>
+                {
+
+                    builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+
+                }));
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+            builder.Services.AddTransient(typeof(DatosPersonalesService));
+            builder.Services.AddTransient(typeof(DatosPersonalesRepository));
+
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 

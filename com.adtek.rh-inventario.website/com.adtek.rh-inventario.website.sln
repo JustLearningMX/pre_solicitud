@@ -5,7 +5,9 @@ VisualStudioVersion = 17.9.34714.143
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "com.adtek.rh-inventario.website", "com.adtek.rh-inventario.website.csproj", "{DB85DCF2-87D1-453F-A0FF-5694F5EC9318}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.adtek.rh-inventario.webapi", "..\com.adtek.rh-inventario.webapi\com.adtek.rh-inventario.webapi.csproj", "{F09FBC22-042E-496E-A44E-0170719533E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "com.adtek.rh-inventario.webapi", "..\com.adtek.rh-inventario.webapi\com.adtek.rh-inventario.webapi.csproj", "{F09FBC22-042E-496E-A44E-0170719533E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.adtek.rh-inventario.br", "..\com.adtek.rh-inventario.br\com.adtek.rh-inventario.br.csproj", "{37089F3A-3901-41C7-BB61-0BA33AFCD1AD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{F09FBC22-042E-496E-A44E-0170719533E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F09FBC22-042E-496E-A44E-0170719533E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F09FBC22-042E-496E-A44E-0170719533E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37089F3A-3901-41C7-BB61-0BA33AFCD1AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37089F3A-3901-41C7-BB61-0BA33AFCD1AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37089F3A-3901-41C7-BB61-0BA33AFCD1AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37089F3A-3901-41C7-BB61-0BA33AFCD1AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
