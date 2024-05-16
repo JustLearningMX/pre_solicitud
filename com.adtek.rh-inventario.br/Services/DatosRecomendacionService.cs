@@ -29,8 +29,9 @@ public class DatosRecomendacionService
     /// <param name="datosRecomendacionDto"> Objetos DTO con los Datos de Recomendacion a crear </param>
     /// <returns> Objeto DTO con los Datos de Recomendacion creados </returns>
     /// <exception cref="Exception"> Excepcion generada si la solicitud no es valida </exception>
-    public DatosRecomendacionDto Crear(DatosRecomendacionDto datosRecomendacionDto)
+    public Result<DatosRecomendacionDto> Crear(DatosRecomendacionDto datosRecomendacionDto)
     {
+        Result<DatosRecomendacionDto> result = new Result<DatosRecomendacionDto>();
 
         string[] errores = this.Valida(datosRecomendacionDto);
         if (errores.Length > 0)
@@ -52,7 +53,11 @@ public class DatosRecomendacionService
         };
 
         this.datosRecomendacionRepository.Crear(datosRecomendacion);
-        return ToDTO(datosRecomendacion);
+
+        result.Resultado = ToDTO(datosRecomendacion); //Es aqui donde pasamos el DTO a Resultado
+        result.CreacionExitosa(); // Setteamos los valores de Codigo y Mensaje
+
+        return result; //Retornamos el objeto Result
     }
 
     private string[] Valida(DatosRecomendacionDto datosRecomendacionDto)

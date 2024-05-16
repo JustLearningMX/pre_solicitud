@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using com.adtek.rh_inventario.br.Models;
 
@@ -11,9 +12,11 @@ using com.adtek.rh_inventario.br.Models;
 namespace com.adtek.rh_inventario.br.Migrations
 {
     [DbContext(typeof(AdtekDBContext))]
-    partial class AdtekDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240516153338_DatosRecomendacionAdtekDB")]
+    partial class DatosRecomendacionAdtekDB
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

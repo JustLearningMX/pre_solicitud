@@ -19,7 +19,7 @@ namespace com.adtek.rh_inventario.br.Dtos
 
         [JsonPropertyName("detalles")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public IEnumerable<string> Detalles { get; set; } //<T> en lugar de <string>
+        public IEnumerable<string> Detalles { get; set; }
 
         [JsonPropertyName("resultado")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
