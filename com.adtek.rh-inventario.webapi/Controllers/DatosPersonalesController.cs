@@ -35,7 +35,7 @@ namespace com.adtek.rh_inventario.webapi.Controllers
         /// <summary>
         /// Crea un registro de datos personales
         /// </summary>
-        /// <param name="datosPersonalesDto">Objeto DTO de Datos Personales a crear</param>
+        /// <param name="datosPersonalesDto">Objeto DTO de Datos Personales a Crear</param>
         /// <returns>Objeto DTO de Datos Personales creado, con su ID</returns>
         [HttpPost]
         public async Task<ActionResult<Result<DatosPersonalesDto>>> Crear(DatosPersonalesDto datosPersonalesDto)

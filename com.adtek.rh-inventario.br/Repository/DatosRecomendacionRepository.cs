@@ -2,14 +2,31 @@
 
 namespace com.adtek.rh_inventario.br.Repository;
 
+/// <summary>
+/// Repositorio para operaciones de BD de la entidad DatosRecomendacion
+/// </summary>
 public class DatosRecomendacionRepository
 {
 
-    // 1. Genera metodo para `Crear` el objeto que se registrara en la BD
-    public void Crear(DatosRecomendacion datosRecomendacion) //2. modelo para guardar el registro
+    private readonly AdtekDBContext context;
+
+    /// <summary>
+    /// Inicializa el contexto de la BD
+    /// </summary>
+    /// <param name="context"> Contexto de la BD </param>
+    public DatosRecomendacionRepository(AdtekDBContext context)
     {
-        //TODO: Guardar el registro
+        this.context = context;
     }
 
-    // 3. Guardar el registro
+
+    /// <summary>
+    /// Crea un nuevo registro de DatosRecomendacion
+    /// </summary>
+    /// <param name="datosRecomendacion"> Modelo de DatosRecomendacion a crear </param>
+    public void Crear(DatosRecomendacion datosRecomendacion)
+    {
+        context.DatosRecomendacion.Add(datosRecomendacion);
+        context.SaveChanges();
+    }
 }

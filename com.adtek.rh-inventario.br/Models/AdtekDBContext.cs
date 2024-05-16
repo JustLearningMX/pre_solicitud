@@ -24,6 +24,10 @@ public class AdtekDBContext : DbContext
     {
     }
 
+    /// <summary>
+    /// Método que se ejecuta al crear el modelo
+    /// </summary>
+    /// <param name="optionsBuilder"> Opciones de configuración de la BD </param>
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlServer("Server=localhost; Database=AdtekDB; User ID=capacitacion; Password=Passw0rd; Trusted_Connection=true; TrustServerCertificate=true");
@@ -33,5 +37,10 @@ public class AdtekDBContext : DbContext
     /// Entidad de datos personalese en la BD
     /// </summary>
     public DbSet<DatosPersonales> DatosPersonales { get; set; } = null!;
-    
+
+    /// <summary>
+    /// Entidad de datos de recomendacion en la BD
+    /// </summary>
+    public DbSet<DatosRecomendacion> DatosRecomendacion { get; set; } = null!;
+
 }
