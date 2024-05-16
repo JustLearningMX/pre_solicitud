@@ -32,6 +32,9 @@ namespace com.adtek.rh_inventario.webapi
             builder.Services.AddTransient(typeof(DatosPersonalesService));
             builder.Services.AddTransient(typeof(DatosPersonalesRepository));
 
+            builder.Services.AddTransient(typeof(DatosRecomendacionService));
+            builder.Services.AddTransient(typeof(DatosRecomendacionRepository));
+
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
