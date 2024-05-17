@@ -1,4 +1,5 @@
 ﻿using com.adtek.rh_inventario.br.Dtos;
+using com.adtek.rh_inventario.br.Exceptions;
 using com.adtek.rh_inventario.br.Models;
 using com.adtek.rh_inventario.br.Repository;
 
@@ -7,7 +8,7 @@ namespace com.adtek.rh_inventario.br.Services;
 /// <summary>
 /// Servicio para la gestion de los Datos de Recomendacion
 /// </summary>
-public class DatosRecomendacionService
+public class DatosRecomendacionService: ExceptionService
 {
 
     private readonly DatosRecomendacionRepository datosRecomendacionRepository;
@@ -33,31 +34,39 @@ public class DatosRecomendacionService
     {
         Result<DatosRecomendacionDto> result = new Result<DatosRecomendacionDto>();
 
-        string[] errores = this.Valida(datosRecomendacionDto);
-        if (errores.Length > 0)
+        try
         {
-            throw new Exception("400 - La solicitud no es valida");
+            string[] errores = this.Valida(datosRecomendacionDto);
+            if (errores.Length > 0)
+            {
+                throw new BadRequestException("La solicitud no es valida", errores);
+            }
+
+            DatosRecomendacion datosRecomendacion = new()
+            {
+                NombreRecomendador = datosRecomendacionDto.NombreRecomendador,
+                Telefono = datosRecomendacionDto.Telefono,
+                TipoCarta = datosRecomendacionDto.TipoCarta,
+                Puesto = datosRecomendacionDto.Puesto,
+                Empresa = datosRecomendacionDto.Empresa,
+                FechaCreacion = DateTime.Now,
+                UsuarioCreacion = "Admin",
+                FechaModificacion = DateTime.Now,
+                UsuarioModificacion = "Admin"
+            };
+
+            this.datosRecomendacionRepository.Crear(datosRecomendacion);
+
+            result.Resultado = ToDTO(datosRecomendacion); //Es aqui donde pasamos el DTO a Resultado
+            result.CreacionExitosa(); // Setteamos los valores de Codigo y Mensaje
+        }
+        catch (Exception ex)
+        {
+            //Aqui manejamos la excepcion
+            result = this.GeneraError<DatosRecomendacionDto>(ex);
         }
 
-        DatosRecomendacion datosRecomendacion = new()
-        {
-            NombreRecomendador = datosRecomendacionDto.NombreRecomendador,
-            Telefono = datosRecomendacionDto.Telefono,
-            TipoCarta = datosRecomendacionDto.TipoCarta,
-            Puesto = datosRecomendacionDto.Puesto,
-            Empresa = datosRecomendacionDto.Empresa,
-            FechaCreacion = DateTime.Now,
-            UsuarioCreacion = "Admin",
-            FechaModificacion = DateTime.Now,
-            UsuarioModificacion = "Admin"
-        };
-
-        this.datosRecomendacionRepository.Crear(datosRecomendacion);
-
-        result.Resultado = ToDTO(datosRecomendacion); //Es aqui donde pasamos el DTO a Resultado
-        result.CreacionExitosa(); // Setteamos los valores de Codigo y Mensaje
-
-        return result; //Retornamos el objeto Result
+        return result;
     }
 
     private string[] Valida(DatosRecomendacionDto datosRecomendacionDto)

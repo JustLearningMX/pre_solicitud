@@ -44,11 +44,9 @@ namespace com.adtek.rh_inventario.br.Services
             {
 
                 string[] errores = this.Valida(datosPersonalesDto);
-                Console.WriteLine("errores 1");
 
                 if (errores.Length > 0)
                 {
-                    Console.WriteLine("errores 2");
                     throw new BadRequestException("La solicitud no es valida", errores);
                 }
 
@@ -69,8 +67,6 @@ namespace com.adtek.rh_inventario.br.Services
 
                 result.Resultado = ToDTO(datosPersonales);
                 result.CreacionExitosa();
-
-                return result;
 
             }
             catch (Exception e)
