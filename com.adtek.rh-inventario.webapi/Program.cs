@@ -11,8 +11,20 @@ namespace com.adtek.rh_inventario.webapi
     {
         public static void Main(string[] args)
         {
-
+            var MyAllowSpecifycOrigins = "_myAllowSpecificOrigins"; // Cors: al inicio
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddCors(options => //Cors: despues del builder
+            {
+                options.AddPolicy(name: MyAllowSpecifycOrigins,
+                    policy =>
+                    {
+                        policy
+                            .WithOrigins("http://localhost:5244")
+                            .WithOrigins("https://localhost:5244")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+            });
 
             // Add services to the container.
 
@@ -49,6 +61,7 @@ namespace com.adtek.rh_inventario.webapi
 
             app.UseHttpsRedirection();
 
+            app.UseCors(MyAllowSpecifycOrigins); //Cors: antes del app.UseAuthorization();
             app.UseAuthorization();
 
 
