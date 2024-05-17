@@ -27,7 +27,7 @@ public class DatosRecomendacionService
     /// Crea un nuevo registro de Datos de Recomendacion
     /// </summary>
     /// <param name="datosRecomendacionDto"> Objetos DTO con los Datos de Recomendacion a crear </param>
-    /// <returns> Objeto DTO con los Datos de Recomendacion creados </returns>
+    /// <returns> Resultado DTO con los Datos de Recomendacion creados </returns>
     /// <exception cref="Exception"> Excepcion generada si la solicitud no es valida </exception>
     public Result<DatosRecomendacionDto> Crear(DatosRecomendacionDto datosRecomendacionDto)
     {

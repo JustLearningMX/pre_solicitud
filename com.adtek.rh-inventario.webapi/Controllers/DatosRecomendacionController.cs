@@ -30,7 +30,7 @@ namespace com.adtek.rh_inventario.webapi.Controllers
         /// <param name="datosRecomendacionDto">Objeto DTO de datos de recomendacion</param>
         /// <returns>Objeto DTO de datos de recomendacion creado</returns>
         [HttpPost]
-        public async Task<ActionResult<DatosRecomendacionDto>> Crear(DatosRecomendacionDto datosRecomendacionDto)
+        public async Task<ActionResult<Result<DatosRecomendacionDto>>> Crear(DatosRecomendacionDto datosRecomendacionDto)
         {
 
             return datosRecomendacionService.Crear(datosRecomendacionDto);
