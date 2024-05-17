@@ -17,7 +17,7 @@ namespace com.adtek.rh_inventario.webapi.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class DatosPersonalesController : ControllerBase
+    public class DatosPersonalesController : MainController
     {
         private readonly DatosPersonalesService datosPersonalesService;
 
@@ -38,9 +38,12 @@ namespace com.adtek.rh_inventario.webapi.Controllers
         /// <param name="datosPersonalesDto">Objeto DTO de Datos Personales a Crear</param>
         /// <returns>Objeto DTO de Datos Personales creado, con su ID</returns>
         [HttpPost]
+        [ProducesResponseType(typeof(ApiResult<DatosPersonalesDto>),StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ApiErrorResult<DatosPersonalesDto>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiErrorResult<DatosPersonalesDto>), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<Result<DatosPersonalesDto>>> Crear(DatosPersonalesDto datosPersonalesDto)
         {
-            return datosPersonalesService.Crear(datosPersonalesDto);
+            return await this.RespuestaAsync(datosPersonalesService.Crear(datosPersonalesDto));
         }
 
     }

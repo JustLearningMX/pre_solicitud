@@ -10,7 +10,7 @@ namespace com.adtek.rh_inventario.webapi.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class DatosRecomendacionController : ControllerBase
+    public class DatosRecomendacionController : MainController
     {
 
         private readonly DatosRecomendacionService datosRecomendacionService;
@@ -30,10 +30,12 @@ namespace com.adtek.rh_inventario.webapi.Controllers
         /// <param name="datosRecomendacionDto">Objeto DTO de datos de recomendacion</param>
         /// <returns>Objeto DTO de datos de recomendacion creado</returns>
         [HttpPost]
+        [ProducesResponseType(typeof(ApiResult<DatosPersonalesDto>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ApiErrorResult<DatosPersonalesDto>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiErrorResult<DatosPersonalesDto>), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<Result<DatosRecomendacionDto>>> Crear(DatosRecomendacionDto datosRecomendacionDto)
         {
-
-            return datosRecomendacionService.Crear(datosRecomendacionDto);
+            return await this.RespuestaAsync(datosRecomendacionService.Crear(datosRecomendacionDto));
         }
 
     }
