@@ -40,7 +40,10 @@ const datosPersonalesBM = {
 
             fetch("https://localhost:7078/api/DatosPersonales", requestOptions)
                 .then((response) => response.json())
-                .then((result) => console.log(result))
+                .then((result) => {
+                    console.log(result);
+                    datosPersonalesBM.cancelar();
+                })
                 .catch((error) => console.error(error));
         }
 
