@@ -82,11 +82,26 @@
                     </div>
                 </div>
                 
-                <hr class="mt-3">
+                <div class="row">
+                    <div class="col">
+        
+                        @* Spinner *@
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner-container-dr text-primary mt-4" role="status">
+                                <span class="visually-hidden"></span>
+                            </div>
+                        </div>
 
-                <div class="col text-end">
-                    <button id="btnDPAgregar" type="button" class="btn btn-success">Agregar</button>
+                        @* Alert *@
+                        <div class="alert alert-dr alert-dismissible fade hide" role="alert">
+                            <strong class="alert-title-dr">Precaucion!</strong> <br />
+                            <span class="alert-detalle-dr">Ocurrio un comportamiento inesperado.</span>
+                            <button id="alert-close-dr" type="button" class="btn-close" aria-label="Close"></button>
+                        </div>
+                    </div>
                 </div>
+                
+                <hr class="mt-3">
                 
                 <table class="table table-striped">
                     <thead>
@@ -95,7 +110,7 @@
                         <th scope="col">Tipo</th>
                         <th scope="col">Persona</th>
                         <th scope="col">Contacto</th>
-                            <th scope="col">Acciones</th>
+                        <th scope="col">Acciones</th>
                     </tr>
                     </thead>
                     <tbody>
