@@ -120,4 +120,35 @@ public class DatosRecomendacionService: ExceptionService
             Empresa = datosRecomendacion.Empresa
         };
     }
+
+    public Result<List<DatosRecomendacionDto>> ObtenerLista()
+    {
+
+        Result<List<DatosRecomendacionDto>> result = new Result<List<DatosRecomendacionDto>>();
+
+        try
+        {
+            // Obtener los registros de DatosRecomendacion desde el repositorio
+            var datosRecomendacionList = this.datosRecomendacionRepository.ObtenerLista();
+
+            if (datosRecomendacionList == null || datosRecomendacionList.Count == 0)
+            {
+                throw new NotFoundException("Sin registros", ["No se encontraron registros de Datos de Recomendacion"]);
+            }
+
+            // Mapear los registros a DTOs
+            var datosRecomendacionDtoList = datosRecomendacionList.Select(dr => ToDTO(dr)).ToList();
+
+            // Configurar el resultado
+            result.Resultado = datosRecomendacionDtoList;
+            result.ConsultaExitosa();
+        }
+        catch (Exception ex)
+        {
+            // Manejar las excepciones y configurar el resultado de error
+            result = this.GeneraError<List<DatosRecomendacionDto>>(ex);
+        }
+
+        return result;
+    }
 }

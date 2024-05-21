@@ -38,5 +38,18 @@ namespace com.adtek.rh_inventario.webapi.Controllers
             return await this.RespuestaAsync(datosRecomendacionService.Crear(datosRecomendacionDto));
         }
 
+        /// <summary>
+        /// Obtiene los registros de datos de recomendacion
+        /// </summary>
+        /// <returns>Listado de datos de recomendacion obtenido</returns>
+        [HttpGet]
+        [ProducesResponseType(typeof(ApiResult<List<DatosRecomendacionDto>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiErrorResult<List<DatosRecomendacionDto>>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiErrorResult<List<DatosRecomendacionDto>>), StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<Result<List<DatosRecomendacionDto>>>> ObtenerLista()
+        {
+            return await this.RespuestaAsync(datosRecomendacionService.ObtenerLista());
+        }
+
     }
 }

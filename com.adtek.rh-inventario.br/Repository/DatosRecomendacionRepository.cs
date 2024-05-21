@@ -1,4 +1,5 @@
-﻿using com.adtek.rh_inventario.br.Models;
+﻿using com.adtek.rh_inventario.br.Dtos;
+using com.adtek.rh_inventario.br.Models;
 
 namespace com.adtek.rh_inventario.br.Repository;
 
@@ -28,5 +29,14 @@ public class DatosRecomendacionRepository
     {
         context.DatosRecomendacion.Add(datosRecomendacion);
         context.SaveChanges();
+    }
+
+    /// <summary>
+    /// Obtiene todos los registros de DatosRecomendacion
+    /// </summary>
+    /// <returns>Lista de DatosRecomendacion</returns>
+    public List<DatosRecomendacion> ObtenerLista()
+    {
+        return context.DatosRecomendacion.ToList();
     }
 }
