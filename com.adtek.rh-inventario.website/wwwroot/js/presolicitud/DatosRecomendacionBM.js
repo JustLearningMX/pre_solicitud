@@ -20,6 +20,8 @@ const datosRecomendacionBM = {
     alertDetalle: document.querySelector('.alert-detalle-dr'),
     spinnerContainer: document.querySelector('.spinner-container-dr'),
 
+    tableBody: document.querySelector('.table-body'),
+
     guardar: function () {
         if (datosRecomendacionBM.form.checkValidity()) {
             const myHeaders = new Headers();
@@ -56,6 +58,11 @@ const datosRecomendacionBM = {
                         datosRecomendacionBM.alertContainer.classList.add('alert-success');
                         datosRecomendacionBM.alertTitle.textContent = "Informacion guardada";
                         datosRecomendacionBM.alertDetalle.textContent = result.mensaje;
+
+                        //Agrego el nuevo registro a la lista
+                        const proxyDR = datosRecomendacionBM.proxiedDR();
+                        proxyDR.list = [...proxyDR.list, result.resultado];
+
                         datosRecomendacionBM.cancelar();
                     }
                     else if (Number(result.codigo) >= 400 && Number(result.codigo) <= 499) {
@@ -120,10 +127,95 @@ const datosRecomendacionBM = {
         datosRecomendacionBM.txtTipoDeCarta.onchange = datosRecomendacionBM.habilitarCamposRecomendacionLaboral;
         datosRecomendacionBM.btnDRCancelar.onclick = datosRecomendacionBM.cancelar;
         datosRecomendacionBM.alertBtnClose.onclick = datosRecomendacionBM.cerrarAlertaDR;
-
     },
+
+    /* Proxi para manejar la lista */
+
+    /*listadoDatosDeRecomendacion: function () {
+        return {
+            name: "datosRecomendacion",
+            list: []
+        }
+    },*/
+    listadoDatosDeRecomendacion: {
+            name: "datosRecomendacion",
+            list: []      
+    },
+
+    // Crea un manejador para el Proxy
+    handler: {       
+        set(target, property, value) {
+            target[property] = value;
+            if (property === 'list') {
+                console.log(`${property}: `);
+                console.log(value);
+                datosRecomendacionBM.updateList(value);
+            }
+            return true; // Indica que la operación se realizó con éxito
+        }
+    },
+
+    // Crea el Proxy
+    proxiedDR: function () {
+        return new Proxy(datosRecomendacionBM.listadoDatosDeRecomendacion, datosRecomendacionBM.handler)
+    },
+
+    // Función para actualizar la lista en la interfaz de usuario
+    updateList: function (items) {
+        datosRecomendacionBM.clearList();
+
+        items.forEach(item => {
+            const row = document.createElement('tr');
+            const tipoCarta = Number(item.tipoCarta) === 1 ? 'Personal' : 'Laboral';
+
+            row.innerHTML = `
+                <th scope="row">${item.id}</th>
+                <td>${tipoCarta}</td>
+                <td>${item.nombreRecomendador}</td>
+                <td>${item.telefono}</td>
+                <td>
+                    <button type="button" class="btn btn-outline-secondary">Editar</button>
+                    <button type="button" class="btn btn-outline-danger">Eliminar</button>
+                </td>
+            `;
+            datosRecomendacionBM.tableBody.appendChild(row);
+        });
+    },
+
+    // Función para limpiar la lista
+    clearList: function () {
+        datosRecomendacionBM.tableBody.innerHTML = '';
+    },
+
+    /*Fin de Proxi para manejar la lista */
+
+    obtenerRegistros: function () {
+        const myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        const requestOptions = {
+            method: "GET",
+            headers: myHeaders,
+            redirect: "follow"
+        };
+
+        fetch("https://localhost:7078/api/DatosRecomendacion", requestOptions)
+            .then((response) => response.json())
+            .then((result) => {
+                if(result.resultado.length > 0) {
+                    datosRecomendacionBM.updateList(result.resultado);
+
+                    const proxyDR = datosRecomendacionBM.proxiedDR();
+                    proxyDR.list = [...result.resultado];
+                }
+            })
+            .catch((error) => console.log("error", error));
+    },
+
+
 
     inicializar: function () {
         datosRecomendacionBM.cargarEventos();
+        datosRecomendacionBM.obtenerRegistros();
     }
 };

@@ -139,13 +139,11 @@ public class DatosRecomendacionService: ExceptionService
             // Mapear los registros a DTOs
             var datosRecomendacionDtoList = datosRecomendacionList.Select(dr => ToDTO(dr)).ToList();
 
-            // Configurar el resultado
             result.Resultado = datosRecomendacionDtoList;
             result.ConsultaExitosa();
         }
         catch (Exception ex)
         {
-            // Manejar las excepciones y configurar el resultado de error
             result = this.GeneraError<List<DatosRecomendacionDto>>(ex);
         }
 
