@@ -9,7 +9,7 @@
         if (Number(result.codigo) >= 200 && Number(result.codigo) <= 299) {
             // OK
             alertContainer.classList.add('alert-success');
-            alertTitle.textContent = "Informacion guardada";
+            alertTitle.textContent = "Procedimiento exitoso";
             alertDetalle.textContent = result.mensaje;
             cancelar();
         }

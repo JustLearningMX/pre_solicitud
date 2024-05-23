@@ -2,11 +2,15 @@
     datosRecomendacionBM.inicializar();
 });
 
+var URLFetch = "https://localhost:7078/api/DatosRecomendacion";
+
 const datosRecomendacionBM = {
     
     form: document.getElementById('formDatosRecomendacion'),
+
     btnDRGuardar: document.getElementById('btnDRGuardar'),
     btnDRCancelar: document.getElementById('btnDRCancelar'),
+    //btnDelete: document.getElementById('btn-delete'),
 
     txtPersona: document.getElementById('persona'),
     txtTelefono: document.getElementById('telContacto'),
@@ -43,7 +47,7 @@ const datosRecomendacionBM = {
             datosRecomendacionBM.btnDRGuardar.classList.add('disabled');
             datosRecomendacionBM.btnDRCancelar.classList.add('disabled');
 
-            fetch("https://localhost:7078/api/DatosRecomendacion", requestOptions)
+            fetch(`${URLFetch}`, requestOptions)
                 .then((response) => response.json())
                 .then((result) => {
 
@@ -70,6 +74,45 @@ const datosRecomendacionBM = {
 
         datosRecomendacionBM.form.classList.add('was-validated');
 
+    },
+
+    eliminar: function (id) {
+        const myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        const requestOptions = {
+            method: "DELETE",
+            headers: myHeaders,
+            redirect: "follow"
+        };
+
+        datosRecomendacionBM.spinnerContainer.classList.add('spinner-grow');
+        datosRecomendacionBM.btnDRGuardar.classList.add('disabled');
+        datosRecomendacionBM.btnDRCancelar.classList.add('disabled');
+
+        fetch(`${URLFetch}/${id}`, requestOptions)
+            .then((response) => response.json())
+            .then((result) => {
+
+                if (Number(result.codigo) >= 200 && Number(result.codigo) <= 299) {
+
+                    //Elimino el registro de la lista
+                    const proxyDR = datosRecomendacionBM.proxiedDR();
+                    proxyDR.list = proxyDR.list.filter(item => item.id !== id);
+
+                }
+
+                alert.mostrar(datosRecomendacionBM.alertContainer, datosRecomendacionBM.cancelar, result);
+
+            })
+            .catch((error) => {
+                alert.mostrarError(datosRecomendacionBM.alertContainer, error);
+            })
+            .finally(() => {
+                datosRecomendacionBM.spinnerContainer.classList.remove('spinner-grow');
+                datosRecomendacionBM.btnDRGuardar.classList.remove('disabled');
+                datosRecomendacionBM.btnDRCancelar.classList.remove('disabled');
+            });
     },
 
     habilitarCamposRecomendacionLaboral: function () {
@@ -109,18 +152,12 @@ const datosRecomendacionBM = {
             list: []
         }
     },
-    /*listadoDatosDeRecomendacion: {
-            name: "datosRecomendacion",
-            list: []      
-    },*/
 
     // Crea un manejador para el Proxy
     handler: {       
         set(target, property, value) {
             target[property] = value;
             if (property === 'list') {
-                console.log(`${property}: `);
-                console.log(value);
                 datosRecomendacionBM.updateList(value);
             }
             return true; // Indica que la operación se realizó con éxito
@@ -146,10 +183,14 @@ const datosRecomendacionBM = {
                 <td>${item.nombreRecomendador}</td>
                 <td>${item.telefono}</td>
                 <td>
-                    <button type="button" class="btn btn-outline-secondary">Editar</button>
-                    <button type="button" class="btn btn-outline-danger">Eliminar</button>
+                    <button id="btn-edit" type="button" class="btn btn-outline-secondary">Editar</button>
+                    <button id="btn-delete" type="button" class="btn btn-outline-danger">Eliminar</button>
                 </td>
             `;
+
+            const deleteButton = row.querySelector('#btn-delete');
+            deleteButton.addEventListener('click', () => this.eliminar(item.id));
+
             datosRecomendacionBM.tableBody.appendChild(row);
         });
     },
@@ -171,7 +212,7 @@ const datosRecomendacionBM = {
             redirect: "follow"
         };
 
-        fetch("https://localhost:7078/api/DatosRecomendacion", requestOptions)
+        fetch(`${URLFetch}`, requestOptions)
             .then((response) => response.json())
             .then((result) => {
                 if (result.codigo >= 200 && result.codigo <= 299 && result.resultado.length > 0) {
@@ -190,8 +231,6 @@ const datosRecomendacionBM = {
             })
             .catch((error) => console.log("error", error));
     },
-
-
 
     inicializar: function () {
         datosRecomendacionBM.cargarEventos();
