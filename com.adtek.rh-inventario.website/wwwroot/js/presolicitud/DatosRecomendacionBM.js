@@ -15,9 +15,6 @@ const datosRecomendacionBM = {
     txtEmpresa: document.getElementById('empresa'),
 
     alertContainer: document.querySelector('.alert-dr'),
-    alertBtnClose: document.querySelector('#alert-close-dr'),
-    alertTitle: document.querySelector('.alert-title-dr'),
-    alertDetalle: document.querySelector('.alert-detalle-dr'),
     spinnerContainer: document.querySelector('.spinner-container-dr'),
 
     tableBody: document.querySelector('.table-body'),
@@ -49,47 +46,23 @@ const datosRecomendacionBM = {
             fetch("https://localhost:7078/api/DatosRecomendacion", requestOptions)
                 .then((response) => response.json())
                 .then((result) => {
-                    console.log(result);
-                    datosRecomendacionBM.alertContainer.classList.remove('alert-success', 'alert-warning', 'alert-danger');
-                    datosRecomendacionBM.spinnerContainer.classList.remove('spinner-grow');
 
                     if (Number(result.codigo) >= 200 && Number(result.codigo) <= 299) {
-                        // OK
-                        datosRecomendacionBM.alertContainer.classList.add('alert-success');
-                        datosRecomendacionBM.alertTitle.textContent = "Informacion guardada";
-                        datosRecomendacionBM.alertDetalle.textContent = result.mensaje;
 
                         //Agrego el nuevo registro a la lista
                         const proxyDR = datosRecomendacionBM.proxiedDR();
                         proxyDR.list = [...proxyDR.list, result.resultado];
 
-                        datosRecomendacionBM.cancelar();
-                    }
-                    else if (Number(result.codigo) >= 400 && Number(result.codigo) <= 499) {
-                        // Bad Request
-                        datosRecomendacionBM.alertContainer.classList.add('alert-warning');
-                        datosRecomendacionBM.alertTitle.textContent = result.mensaje;
-                        datosRecomendacionBM.alertDetalle.innerHTML = result.detalles.join(' <br> ');
-                    }
-                    else {
-                        // Error
-                        datosRecomendacionBM.alertContainer.classList.add('alert-danger');
-                        datosRecomendacionBM.alertTitle.textContent = result.mensaje;
-                        datosRecomendacionBM.alertDetalle.textContent = result.detalles.join(' <br> ');
                     }
 
-                    datosRecomendacionBM.alertContainer.classList.add('show');
-                    datosRecomendacionBM.alertContainer.classList.remove('hide');
+                    alert.mostrar(datosRecomendacionBM.alertContainer, datosRecomendacionBM.cancelar, result);
+                    
                 })
                 .catch((error) => {
-                    datosRecomendacionBM.spinnerContainer.classList.remove('spinner-grow');
-                    datosRecomendacionBM.alertContainer.classList.add('alert-danger');
-                    datosRecomendacionBM.alertTitle.textContent = error.mensaje;
-                    datosRecomendacionBM.alertDetalle.textContent = error.detalles.join(' <br> ');
-                    datosRecomendacionBM.alertContainer.classList.add('show');
-                    datosRecomendacionBM.alertContainer.classList.remove('hide');
+                    alert.mostrarError(datosRecomendacionBM.alertContainer, error);
                 })
                 .finally(() => {
+                    datosRecomendacionBM.spinnerContainer.classList.remove('spinner-grow');
                     datosRecomendacionBM.btnDRGuardar.classList.remove('disabled');
                     datosRecomendacionBM.btnDRCancelar.classList.remove('disabled');
                 });
@@ -126,21 +99,20 @@ const datosRecomendacionBM = {
         datosRecomendacionBM.btnDRGuardar.onclick = datosRecomendacionBM.guardar;
         datosRecomendacionBM.txtTipoDeCarta.onchange = datosRecomendacionBM.habilitarCamposRecomendacionLaboral;
         datosRecomendacionBM.btnDRCancelar.onclick = datosRecomendacionBM.cancelar;
-        datosRecomendacionBM.alertBtnClose.onclick = datosRecomendacionBM.cerrarAlertaDR;
     },
 
     /* Proxi para manejar la lista */
 
-    /*listadoDatosDeRecomendacion: function () {
+    listadoDatosDeRecomendacion: function () {
         return {
             name: "datosRecomendacion",
             list: []
         }
-    },*/
-    listadoDatosDeRecomendacion: {
+    },
+    /*listadoDatosDeRecomendacion: {
             name: "datosRecomendacion",
             list: []      
-    },
+    },*/
 
     // Crea un manejador para el Proxy
     handler: {       
@@ -202,7 +174,14 @@ const datosRecomendacionBM = {
         fetch("https://localhost:7078/api/DatosRecomendacion", requestOptions)
             .then((response) => response.json())
             .then((result) => {
-                if(result.resultado.length > 0) {
+                if (result.codigo >= 200 && result.codigo <= 299 && result.resultado.length > 0) {
+                    const tableBody = document.querySelector('#table-list');
+                    const messageTable = document.querySelector('#message-table-dr');
+
+                    tableBody.classList.remove('hide');
+                    messageTable.classList.remove('d-flex');
+                    messageTable.classList.add('hide');
+
                     datosRecomendacionBM.updateList(result.resultado);
 
                     const proxyDR = datosRecomendacionBM.proxiedDR();
