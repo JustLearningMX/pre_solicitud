@@ -115,6 +115,13 @@ const datosRecomendacionBM = {
             });
     },
 
+    editar: function (id) {
+        console.log(`Editando registro ${id}`);
+        const datosRecomendacion = this.obtenerRegistro(id);
+
+        console.log(datosRecomendacion);
+    },
+
     habilitarCamposRecomendacionLaboral: function () {
         let value = datosRecomendacionBM.txtTipoDeCarta.value;
 
@@ -191,6 +198,9 @@ const datosRecomendacionBM = {
             const deleteButton = row.querySelector('#btn-delete');
             deleteButton.addEventListener('click', () => this.eliminar(item.id));
 
+            const editButton = row.querySelector('#btn-edit');
+            editButton.addEventListener('click', () => this.editar(item.id));
+
             datosRecomendacionBM.tableBody.appendChild(row);
         });
     },
@@ -230,6 +240,36 @@ const datosRecomendacionBM = {
                 }
             })
             .catch((error) => console.log("error", error));
+    },
+
+    obtenerRegistro: function (id) {
+        const datosRecomendacion = new IDatosRecomendacion();
+        console.log(datosRecomendacion);
+
+        datosRecomendacion.id = 15;
+
+        /*const myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        const requestOptions = {
+            method: "GET",
+            headers: myHeaders,
+            redirect: "follow"
+        };
+
+        fetch(`${URLFetch}/${id}`, requestOptions)
+            .then((response) => response.json())
+            .then((result) => {
+                console.log(result);
+                if (result.codigo >= 200 && result.codigo <= 299 && result.resultado.length > 0) {
+                    DATOS_RECOMENDACION = result.resultado;
+                } else {
+                    alert.mostrar(datosRecomendacionBM.alertContainer, datosRecomendacionBM.cancelar, result);
+                }
+            })
+            .catch((error) => console.log("error", error));*/
+
+        return datosRecomendacion
     },
 
     inicializar: function () {
