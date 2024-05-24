@@ -51,5 +51,19 @@ namespace com.adtek.rh_inventario.webapi.Controllers
             return await this.RespuestaAsync(datosRecomendacionService.ObtenerLista());
         }
 
+        /// <summary>
+        /// Elimina un registro de datos de recomendacion
+        /// </summary>
+        /// <param name="id">El id del registro a eliminar</param>
+        [HttpDelete("{id}")]
+        [ProducesResponseType(typeof(ApiResult<DatosRecomendacionDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiErrorResult<DatosRecomendacionDto>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiErrorResult<DatosRecomendacionDto>), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiErrorResult<DatosRecomendacionDto>), StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<Result<DatosRecomendacionDto>>> Eliminar(int id)
+        {
+            return await this.RespuestaAsync(datosRecomendacionService.Eliminar(id));
+        }
+
     }
 }

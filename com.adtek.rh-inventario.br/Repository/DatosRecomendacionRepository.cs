@@ -1,4 +1,5 @@
 ﻿using com.adtek.rh_inventario.br.Dtos;
+using com.adtek.rh_inventario.br.Exceptions;
 using com.adtek.rh_inventario.br.Models;
 
 namespace com.adtek.rh_inventario.br.Repository;
@@ -38,5 +39,22 @@ public class DatosRecomendacionRepository
     public List<DatosRecomendacion> ObtenerLista()
     {
         return context.DatosRecomendacion.ToList();
+    }
+
+    /// <summary>
+    /// Elimina un registro de DatosRecomendacion
+    /// </summary>
+    public void Eliminar(int id)
+    {
+        DatosRecomendacion datosRecomendacion = context.DatosRecomendacion.Find(id);
+
+        if (datosRecomendacion == null)
+        {
+            string[] errors = [$"No se encontro un registro acerca de ese documento con id {id}"];
+            throw new NotFoundException("Sin registro del documento", errors);
+        }
+
+        context.DatosRecomendacion.Remove(datosRecomendacion);
+        context.SaveChanges();
     }
 }

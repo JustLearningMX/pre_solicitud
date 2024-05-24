@@ -149,4 +149,32 @@ public class DatosRecomendacionService: ExceptionService
 
         return result;
     }
+
+    /// <summary>
+    /// Elimina un registro de Datos de Recomendacion
+    /// </summary>
+    /// <param name="id">El id del registro a eliminar</param>
+    public Result<DatosRecomendacionDto> Eliminar(int id)
+    {
+
+        Result<DatosRecomendacionDto> result = new Result<DatosRecomendacionDto>();
+
+        try
+        {
+
+            if (id <= 0)
+            {
+                throw new BadRequestException("El Id es requerido", ["Se requiere el Id para eliminar un registro"]);
+            }
+
+            this.datosRecomendacionRepository.Eliminar(id);
+            result.EliminacionExitosa();
+        }
+        catch (Exception ex)
+        {
+            result = this.GeneraError<DatosRecomendacionDto>(ex);
+        }
+
+        return result;
+    }
 }

@@ -55,7 +55,7 @@ namespace com.adtek.rh_inventario.br.Dtos
 
         public void EliminacionExitosa()
         {
-            this.Codigo = (int)HttpStatusCode.NoContent;
+            this.Codigo = (int)HttpStatusCode.OK;
             this.Mensaje = "Eliminacion exitosa";
         }
 
