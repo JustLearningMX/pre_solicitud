@@ -65,5 +65,21 @@ namespace com.adtek.rh_inventario.webapi.Controllers
             return await this.RespuestaAsync(datosRecomendacionService.Eliminar(id));
         }
 
+        /// <summary>
+        /// Obtiene un registro de DatosRecomendacion por su ID
+        /// </summary>
+        /// <returns>DTO de DatosRecomendacion</returns>
+        /// <param name="id"> ID del documento a buscar </param>
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(ApiResult<DatosRecomendacionDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiErrorResult<DatosRecomendacionDto>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiErrorResult<DatosRecomendacionDto>), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiErrorResult<DatosRecomendacionDto>), StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<Result<DatosRecomendacionDto>>> ObtenerPorId(int id)
+        {
+            return await this.RespuestaAsync(datosRecomendacionService.ObtenerPorId(id));
+        }
+
+
     }
 }

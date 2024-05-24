@@ -177,4 +177,33 @@ public class DatosRecomendacionService: ExceptionService
 
         return result;
     }
+
+    /// <summary>
+    /// Obtiene un registro de DatosRecomendacion por su ID
+    /// </summary>
+    /// <returns>DTO de DatosRecomendacion</returns>
+    /// <param name="id"> ID del documento a buscar </param>
+    public Result<DatosRecomendacionDto> ObtenerPorId(int id)
+    {
+        Result<DatosRecomendacionDto> result = new Result<DatosRecomendacionDto>();
+
+        try
+        {
+            if (id <= 0)
+            {
+                throw new BadRequestException("El Id es requerido", ["Se requiere el Id para buscar un registro"]);
+            }
+
+            var datosRecomendacion = this.datosRecomendacionRepository.ObtenerPorId(id);
+
+            result.Resultado = ToDTO(datosRecomendacion);
+            result.ConsultaExitosa();
+        }
+        catch (Exception ex)
+        {
+            result = this.GeneraError<DatosRecomendacionDto>(ex);
+        }
+
+        return result;
+    }
 }
