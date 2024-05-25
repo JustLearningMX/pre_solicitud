@@ -36,6 +36,9 @@
         alertContainer.classList.remove('alert-success', 'alert-warning', 'alert-danger');
         alertContainer.classList.add('alert-danger');
 
+        const alertBtnClose = alertContainer.querySelector('#alert-close');
+        alertBtnClose.addEventListener('click', () => this.cerrarAlerta(alertContainer));
+
         const alertTitle = alertContainer.querySelector('.alert-title');
         const alertDetalle = alertContainer.querySelector('.alert-detalle');
 

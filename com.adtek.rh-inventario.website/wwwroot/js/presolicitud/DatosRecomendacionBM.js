@@ -10,7 +10,6 @@ const datosRecomendacionBM = {
 
     btnDRGuardar: document.getElementById('btnDRGuardar'),
     btnDRCancelar: document.getElementById('btnDRCancelar'),
-    //btnDelete: document.getElementById('btn-delete'),
 
     txtPersona: document.getElementById('persona'),
     txtTelefono: document.getElementById('telContacto'),
@@ -23,25 +22,14 @@ const datosRecomendacionBM = {
 
     tableBody: document.querySelector('.table-body'),
 
-    guardar: function () {
-        if (datosRecomendacionBM.form.checkValidity()) {
-            const myHeaders = new Headers();
-            myHeaders.append("Content-Type", "application/json");
+    guardar: function (opcion, id) {
+        console.log(opcion);
+        if (datosRecomendacionBM.form.checkValidity()) { 
 
-            const body = JSON.stringify({
-                "nombreRecomendador": datosRecomendacionBM.txtPersona.value,
-                "telefono": datosRecomendacionBM.txtTelefono.value,
-                "tipoCarta": datosRecomendacionBM.txtTipoDeCarta.value,
-                "puesto": datosRecomendacionBM.txtTipoDeCarta.value === "2" ? datosRecomendacionBM.txtPuesto.value : "empty",
-                "empresa": datosRecomendacionBM.txtTipoDeCarta.value === "2" ? datosRecomendacionBM.txtEmpresa.value : "empty",
-            });
-
-            const requestOptions = {
-                method: "POST",
-                headers: myHeaders,
-                body,
-                redirect: "follow"
-            };
+            const reqType = opcion === "guardar" ? "POST" : "PUT";
+            
+            const body = datosRecomendacionBM.crearBody();
+            const requestOptions = datosRecomendacionBM.generarHeaders(body, reqType);
 
             datosRecomendacionBM.spinnerContainer.classList.add('spinner-grow');
             datosRecomendacionBM.btnDRGuardar.classList.add('disabled');
@@ -55,12 +43,18 @@ const datosRecomendacionBM = {
 
                         //Agrego el nuevo registro a la lista
                         const proxyDR = datosRecomendacionBM.proxiedDR();
+
+                        if (opcion === "actualizar") {
+                            proxyDR.list = proxyDR.list.filter(item => item.id !== id);
+                            this.btnDRGuardar.textContent = 'Guardar';
+                        }
+                        
                         proxyDR.list = [...proxyDR.list, result.resultado];
 
                     }
 
                     alert.mostrar(datosRecomendacionBM.alertContainer, datosRecomendacionBM.cancelar, result);
-                    
+
                 })
                 .catch((error) => {
                     alert.mostrarError(datosRecomendacionBM.alertContainer, error);
@@ -77,14 +71,7 @@ const datosRecomendacionBM = {
     },
 
     eliminar: function (id) {
-        const myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-
-        const requestOptions = {
-            method: "DELETE",
-            headers: myHeaders,
-            redirect: "follow"
-        };
+        const requestOptions = this.generarHeaders(null, "DELETE");
 
         datosRecomendacionBM.spinnerContainer.classList.add('spinner-grow');
         datosRecomendacionBM.btnDRGuardar.classList.add('disabled');
@@ -112,14 +99,31 @@ const datosRecomendacionBM = {
                 datosRecomendacionBM.spinnerContainer.classList.remove('spinner-grow');
                 datosRecomendacionBM.btnDRGuardar.classList.remove('disabled');
                 datosRecomendacionBM.btnDRCancelar.classList.remove('disabled');
+                this.cancelar();
             });
     },
 
-    editar: function (id) {
-        console.log(`Editando registro ${id}`);
-        const datosRecomendacion = this.obtenerRegistro(id);
+    editar: async function (id) {
+        datosRecomendacionBM.btnDRGuardar.textContent = 'Actualizar';
+        const datosRecomendacion = await this.obtenerRegistro(id);
 
         console.log(datosRecomendacion);
+
+        if (datosRecomendacion.id > 0) {
+            datosRecomendacionBM.txtPersona.value = datosRecomendacion.nombreRecomendador;
+            datosRecomendacionBM.txtTelefono.value = datosRecomendacion.telefono;
+            datosRecomendacionBM.txtTipoDeCarta.value = datosRecomendacion.tipoCarta;
+
+            if (datosRecomendacion.tipoCarta === 2) {
+                datosRecomendacionBM.txtPuesto.value = datosRecomendacion.puesto;
+                datosRecomendacionBM.txtEmpresa.value = datosRecomendacion.empresa;
+            } else {
+                datosRecomendacionBM.txtPuesto.value = '';
+                datosRecomendacionBM.txtEmpresa.value = '';
+            }
+
+            datosRecomendacionBM.habilitarCamposRecomendacionLaboral();                       
+        }
     },
 
     habilitarCamposRecomendacionLaboral: function () {
@@ -137,6 +141,7 @@ const datosRecomendacionBM = {
     cancelar: function () {
 
         datosRecomendacionBM.form.classList.remove('was-validated');
+        datosRecomendacionBM.btnDRGuardar.textContent = 'Guardar';
         datosRecomendacionBM.form.reset();
     },
 
@@ -146,7 +151,11 @@ const datosRecomendacionBM = {
     },
 
     cargarEventos: function () {
-        datosRecomendacionBM.btnDRGuardar.onclick = datosRecomendacionBM.guardar;
+        datosRecomendacionBM.btnDRGuardar.onclick = () => {
+            const option = datosRecomendacionBM.btnDRGuardar.textContent;
+            datosRecomendacionBM.guardar(option.toLowerCase(), null)
+        };
+
         datosRecomendacionBM.txtTipoDeCarta.onchange = datosRecomendacionBM.habilitarCamposRecomendacionLaboral;
         datosRecomendacionBM.btnDRCancelar.onclick = datosRecomendacionBM.cancelar;
     },
@@ -212,15 +221,39 @@ const datosRecomendacionBM = {
 
     /*Fin de Proxi para manejar la lista */
 
-    obtenerRegistros: function () {
+    generarHeaders: function (body, req) {
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
-        const requestOptions = {
-            method: "GET",
-            headers: myHeaders,
-            redirect: "follow"
-        };
+        const requestOptions = !body && (req === "GET" || req === "DELETE") ?
+            {
+                method: req,
+                headers: myHeaders,
+                redirect: "follow"
+            }
+            : body && (req === "POST" || req === "PUT") ?
+            {
+                method: req,
+                headers: myHeaders,
+                body,
+                redirect: "follow"
+            } : null;
+
+        return requestOptions;
+    },
+
+    crearBody: function () {
+        return JSON.stringify({
+            "nombreRecomendador": datosRecomendacionBM.txtPersona.value,
+            "telefono": datosRecomendacionBM.txtTelefono.value,
+            "tipoCarta": datosRecomendacionBM.txtTipoDeCarta.value,
+            "puesto": datosRecomendacionBM.txtTipoDeCarta.value === "2" ? datosRecomendacionBM.txtPuesto.value : "empty",
+            "empresa": datosRecomendacionBM.txtTipoDeCarta.value === "2" ? datosRecomendacionBM.txtEmpresa.value : "empty",
+        });
+    },
+
+    obtenerRegistros: function () {
+        const requestOptions = this.generarHeaders(null, "GET");
 
         fetch(`${URLFetch}`, requestOptions)
             .then((response) => response.json())
@@ -242,32 +275,23 @@ const datosRecomendacionBM = {
             .catch((error) => console.log("error", error));
     },
 
-    obtenerRegistro: function (id) {
-        const datosRecomendacion = new IDatosRecomendacion();
-        console.log(datosRecomendacion);
+    obtenerRegistro: async function (id) {
+        let datosRecomendacion = new IDatosRecomendacion();
 
-        datosRecomendacion.id = 15;
+        const requestOptions = this.generarHeaders(null, "GET");
 
-        /*const myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
+        try {
+            const response = await fetch(`${URLFetch}/${id}`, requestOptions);
+            const result = await response.json();
 
-        const requestOptions = {
-            method: "GET",
-            headers: myHeaders,
-            redirect: "follow"
-        };
-
-        fetch(`${URLFetch}/${id}`, requestOptions)
-            .then((response) => response.json())
-            .then((result) => {
-                console.log(result);
-                if (result.codigo >= 200 && result.codigo <= 299 && result.resultado.length > 0) {
-                    DATOS_RECOMENDACION = result.resultado;
-                } else {
-                    alert.mostrar(datosRecomendacionBM.alertContainer, datosRecomendacionBM.cancelar, result);
-                }
-            })
-            .catch((error) => console.log("error", error));*/
+            if (result.codigo >= 200 && result.codigo <= 299) {
+                datosRecomendacion = result.resultado;
+            } else {
+                alert.mostrar(datosRecomendacionBM.alertContainer, datosRecomendacionBM.cancelar, result);
+            }
+        } catch (error) {
+            console.log("error", error);
+        }
 
         return datosRecomendacion
     },
