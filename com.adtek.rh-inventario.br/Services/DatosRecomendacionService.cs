@@ -69,58 +69,6 @@ public class DatosRecomendacionService: ExceptionService
         return result;
     }
 
-    private string[] Valida(DatosRecomendacionDto datosRecomendacionDto)
-    {
-        List<string> listaValidaciones = new List<string>();
-
-        if (datosRecomendacionDto == null)
-        {
-            listaValidaciones.Add("Los Datos de Recomendacion son requeridos");
-        }
-        else
-        {
-            if (string.IsNullOrEmpty(datosRecomendacionDto.NombreRecomendador))
-            {
-                listaValidaciones.Add("El Nombre del Recomendador es requerido");
-            }
-
-            if (string.IsNullOrEmpty(datosRecomendacionDto.Telefono))
-            {
-                listaValidaciones.Add("El Telefono es requerido");
-            }
-
-            if (datosRecomendacionDto.TipoCarta == 0)
-            {
-                listaValidaciones.Add("El Tipo de Carta es requerido");
-            }
-
-            if (datosRecomendacionDto.TipoCarta == 2 && string.IsNullOrEmpty(datosRecomendacionDto.Puesto))
-            {
-                listaValidaciones.Add("El Puesto es requerido");
-            }
-
-            if (datosRecomendacionDto.TipoCarta == 2 && string.IsNullOrEmpty(datosRecomendacionDto.Empresa))
-            {
-                listaValidaciones.Add("La Empresa es requerida");
-            }
-        }
-
-        return listaValidaciones.ToArray();
-    }
-
-    private static DatosRecomendacionDto ToDTO(DatosRecomendacion datosRecomendacion)
-    {
-        return new DatosRecomendacionDto
-        {
-            Id = datosRecomendacion.Id,
-            NombreRecomendador = datosRecomendacion.NombreRecomendador,
-            Telefono = datosRecomendacion.Telefono,
-            TipoCarta = datosRecomendacion.TipoCarta,
-            Puesto = datosRecomendacion.Puesto,
-            Empresa = datosRecomendacion.Empresa
-        };
-    }
-
     public Result<List<DatosRecomendacionDto>> ObtenerLista()
     {
 
@@ -183,9 +131,9 @@ public class DatosRecomendacionService: ExceptionService
     /// </summary>
     /// <returns>DTO de DatosRecomendacion</returns>
     /// <param name="id"> ID del documento a buscar </param>
-    public Result<DatosRecomendacionDto> ObtenerPorId(int id)
+    public Result<DatosRecomendacionFullDto> ObtenerPorId(int id)
     {
-        Result<DatosRecomendacionDto> result = new Result<DatosRecomendacionDto>();
+        Result<DatosRecomendacionFullDto> result = new Result<DatosRecomendacionFullDto>();
 
         try
         {
@@ -196,14 +144,141 @@ public class DatosRecomendacionService: ExceptionService
 
             var datosRecomendacion = this.datosRecomendacionRepository.ObtenerPorId(id);
 
-            result.Resultado = ToDTO(datosRecomendacion);
+            result.Resultado = ToDTOFull(datosRecomendacion);
             result.ConsultaExitosa();
         }
         catch (Exception ex)
         {
-            result = this.GeneraError<DatosRecomendacionDto>(ex);
+            result = this.GeneraError<DatosRecomendacionFullDto>(ex);
         }
 
         return result;
+    }
+
+    /// <summary>
+    /// Axtualizar un nuevo registro de DatosRecomendacion
+    /// </summary>
+    /// <param name="datosRecomendacion"> Modelo de DatosRecomendacion a actualizar </param>
+    public Result<DatosRecomendacionFullDto> Actualizar(DatosRecomendacionFullDto datosRecomendacionFullDto)
+    {
+        Result<DatosRecomendacionFullDto> result = new Result<DatosRecomendacionFullDto>();
+
+        try
+        {
+            if (datosRecomendacionFullDto.Id <= 0)
+            {
+                throw new BadRequestException("El Id es requerido", ["Se requiere el Id para actualizar un registro"]);
+            }
+
+            DatosRecomendacionDto datosRecomendacionDto = new()
+            {
+                Id = datosRecomendacionFullDto.Id,
+                NombreRecomendador = datosRecomendacionFullDto.NombreRecomendador,
+                Telefono = datosRecomendacionFullDto.Telefono,
+                TipoCarta = datosRecomendacionFullDto.TipoCarta,
+                Puesto = datosRecomendacionFullDto.Puesto,
+                Empresa = datosRecomendacionFullDto.Empresa
+            };
+
+            string[] errores = this.Valida(datosRecomendacionDto);
+            if (errores.Length > 0)
+            {
+                throw new BadRequestException("La solicitud no es valida", errores);
+            }
+
+            DatosRecomendacion datosRecomendacion = new()
+            {
+                Id = datosRecomendacionFullDto.Id,
+                NombreRecomendador = datosRecomendacionFullDto.NombreRecomendador,
+                Telefono = datosRecomendacionFullDto.Telefono,
+                TipoCarta = datosRecomendacionFullDto.TipoCarta,
+                Puesto = datosRecomendacionFullDto.Puesto,
+                Empresa = datosRecomendacionFullDto.Empresa,
+                FechaCreacion = datosRecomendacionFullDto.FechaCreacion,
+                UsuarioCreacion = datosRecomendacionFullDto.UsuarioCreacion,
+                FechaModificacion = DateTime.Now,
+                UsuarioModificacion = "Admin"
+            };
+
+            this.datosRecomendacionRepository.Actualizar(datosRecomendacion);
+
+            result.Resultado = ToDTOFull(datosRecomendacion);
+            result.ActualizacionExitosa();
+        }
+        catch (Exception ex)
+        {
+            result = this.GeneraError<DatosRecomendacionFullDto>(ex);
+        }
+
+        return result;
+    }
+
+    private string[] Valida(DatosRecomendacionDto datosRecomendacionDto)
+    {
+        List<string> listaValidaciones = new List<string>();
+
+        if (datosRecomendacionDto == null)
+        {
+            listaValidaciones.Add("Los Datos de Recomendacion son requeridos");
+        }
+        else
+        {
+            if (string.IsNullOrEmpty(datosRecomendacionDto.NombreRecomendador))
+            {
+                listaValidaciones.Add("El Nombre del Recomendador es requerido");
+            }
+
+            if (string.IsNullOrEmpty(datosRecomendacionDto.Telefono))
+            {
+                listaValidaciones.Add("El Telefono es requerido");
+            }
+
+            if (datosRecomendacionDto.TipoCarta == 0)
+            {
+                listaValidaciones.Add("El Tipo de Carta es requerido");
+            }
+
+            if (datosRecomendacionDto.TipoCarta == 2 && string.IsNullOrEmpty(datosRecomendacionDto.Puesto))
+            {
+                listaValidaciones.Add("El Puesto es requerido");
+            }
+
+            if (datosRecomendacionDto.TipoCarta == 2 && string.IsNullOrEmpty(datosRecomendacionDto.Empresa))
+            {
+                listaValidaciones.Add("La Empresa es requerida");
+            }
+        }
+
+        return listaValidaciones.ToArray();
+    }
+
+    private static DatosRecomendacionDto ToDTO(DatosRecomendacion datosRecomendacion)
+    {
+        return new DatosRecomendacionDto
+        {
+            Id = datosRecomendacion.Id,
+            NombreRecomendador = datosRecomendacion.NombreRecomendador,
+            Telefono = datosRecomendacion.Telefono,
+            TipoCarta = datosRecomendacion.TipoCarta,
+            Puesto = datosRecomendacion.Puesto,
+            Empresa = datosRecomendacion.Empresa
+        };
+    }
+
+    private static DatosRecomendacionFullDto ToDTOFull(DatosRecomendacion datosRecomendacion)
+    {
+        return new DatosRecomendacionFullDto
+        {
+            Id = datosRecomendacion.Id,
+            NombreRecomendador = datosRecomendacion.NombreRecomendador,
+            Telefono = datosRecomendacion.Telefono,
+            TipoCarta = datosRecomendacion.TipoCarta,
+            Puesto = datosRecomendacion.Puesto,
+            Empresa = datosRecomendacion.Empresa,
+            FechaCreacion = datosRecomendacion.FechaCreacion,
+            UsuarioCreacion = datosRecomendacion.UsuarioCreacion,
+            FechaModificacion = datosRecomendacion.FechaModificacion,
+            UsuarioModificacion = datosRecomendacion.UsuarioModificacion
+        };
     }
 }

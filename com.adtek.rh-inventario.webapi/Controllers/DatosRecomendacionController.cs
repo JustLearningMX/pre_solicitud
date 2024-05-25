@@ -71,15 +71,28 @@ namespace com.adtek.rh_inventario.webapi.Controllers
         /// <returns>DTO de DatosRecomendacion</returns>
         /// <param name="id"> ID del documento a buscar </param>
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(ApiResult<DatosRecomendacionDto>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiErrorResult<DatosRecomendacionDto>), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ApiErrorResult<DatosRecomendacionDto>), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiErrorResult<DatosRecomendacionDto>), StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<Result<DatosRecomendacionDto>>> ObtenerPorId(int id)
+        [ProducesResponseType(typeof(ApiResult<DatosRecomendacionFullDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiErrorResult<DatosRecomendacionFullDto>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiErrorResult<DatosRecomendacionFullDto>), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiErrorResult<DatosRecomendacionFullDto>), StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<Result<DatosRecomendacionFullDto>>> ObtenerPorId(int id)
         {
             return await this.RespuestaAsync(datosRecomendacionService.ObtenerPorId(id));
         }
 
+        /// <summary>
+        /// Actualiza un nuevo registro de datos de recomendacion
+        /// </summary>
+        /// <param name="datosRecomendacionDto">Objeto DTO de datos de recomendacion</param>
+        /// <returns>Objeto DTO de datos de recomendacion actualizado</returns>
+        [HttpPut]
+        [ProducesResponseType(typeof(ApiResult<DatosRecomendacionFullDto>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ApiErrorResult<DatosRecomendacionFullDto>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiErrorResult<DatosRecomendacionFullDto>), StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<Result<DatosRecomendacionFullDto>>> Actualizar(DatosRecomendacionFullDto datosRecomendacionFullDto)
+        {
+            return await this.RespuestaAsync(datosRecomendacionService.Actualizar(datosRecomendacionFullDto));
+        }
 
     }
 }

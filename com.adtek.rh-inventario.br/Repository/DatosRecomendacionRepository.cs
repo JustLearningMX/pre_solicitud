@@ -76,4 +76,37 @@ public class DatosRecomendacionRepository
 
         return datosRecomendacion;
     }
+
+    /// <summary>
+    /// Axtualizar un nuevo registro de DatosRecomendacion
+    /// </summary>
+    /// <param name="datosRecomendacion"> Modelo de DatosRecomendacion a actualizar </param>
+    public void Actualizar(DatosRecomendacion datosRecomendacion)
+    {
+
+        context.Entry(datosRecomendacion).State = EntityState.Modified;
+
+        try
+        {
+            context.SaveChanges();
+        }
+        catch (DbUpdateConcurrencyException e)
+        {
+            if (!DatosRecomendacionExists(datosRecomendacion.Id))
+            {
+                string[] errors = [$"No se encontro un registro acerca del documento con id {datosRecomendacion.Id}"];
+                throw new NotFoundException("Sin registro del documento", errors);
+            }
+            else
+            {
+                Console.WriteLine(e);
+                throw new Exception();
+            }
+        }
+    }
+
+    private bool DatosRecomendacionExists(int id)
+    {
+        return context.DatosRecomendacion.Any(e => e.Id == id);
+    }
 }

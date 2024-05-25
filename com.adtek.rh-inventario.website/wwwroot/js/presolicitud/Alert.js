@@ -19,6 +19,15 @@
             alertTitle.textContent = result.mensaje;
             alertDetalle.innerHTML = result.detalles.join(' <br> ');
         }
+        else if (Number(result.status) >= 400 && Number(result.status) <= 499) {
+            // Bad Request by Server Validations
+
+            const detalles = Object.keys(result.errors).map(key => result.errors[key]);
+
+            alertContainer.classList.add('alert-warning');
+            alertTitle.textContent = result.title;
+            alertDetalle.innerHTML = detalles.join(' <br> ');
+        }
         else {
             // Error
             alertContainer.classList.add('alert-danger');

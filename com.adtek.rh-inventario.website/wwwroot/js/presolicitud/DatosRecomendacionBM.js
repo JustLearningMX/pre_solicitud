@@ -22,13 +22,12 @@ const datosRecomendacionBM = {
 
     tableBody: document.querySelector('.table-body'),
 
-    guardar: function (opcion, id) {
-        console.log(opcion);
+    guardar: function (opcion) {
         if (datosRecomendacionBM.form.checkValidity()) { 
 
             const reqType = opcion === "guardar" ? "POST" : "PUT";
             
-            const body = datosRecomendacionBM.crearBody();
+            const body = datosRecomendacionBM.crearBody(opcion);
             const requestOptions = datosRecomendacionBM.generarHeaders(body, reqType);
 
             datosRecomendacionBM.spinnerContainer.classList.add('spinner-grow');
@@ -45,11 +44,12 @@ const datosRecomendacionBM = {
                         const proxyDR = datosRecomendacionBM.proxiedDR();
 
                         if (opcion === "actualizar") {
-                            proxyDR.list = proxyDR.list.filter(item => item.id !== id);
+                            proxyDR.list = proxyDR.list.filter(item => item.id !== datosRecomendacionBM.DatosDeRecomendacionFullDto.data.id);
                             this.btnDRGuardar.textContent = 'Guardar';
                         }
-                        
-                        proxyDR.list = [...proxyDR.list, result.resultado];
+
+                        proxyDR.list = [...proxyDR.list, result.resultado].sort((a, b) => a.id - b.id)
+                        //proxyDR.list = proxyDR.list.sort((a, b) => a.id - b.id);                                                                    
 
                     }
 
@@ -105,9 +105,10 @@ const datosRecomendacionBM = {
 
     editar: async function (id) {
         datosRecomendacionBM.btnDRGuardar.textContent = 'Actualizar';
-        const datosRecomendacion = await this.obtenerRegistro(id);
+        
+        await this.obtenerRegistro(id);
 
-        console.log(datosRecomendacion);
+        const datosRecomendacion = datosRecomendacionBM.DatosDeRecomendacionFullDto.data;
 
         if (datosRecomendacion.id > 0) {
             datosRecomendacionBM.txtPersona.value = datosRecomendacion.nombreRecomendador;
@@ -123,7 +124,8 @@ const datosRecomendacionBM = {
             }
 
             datosRecomendacionBM.habilitarCamposRecomendacionLaboral();                       
-        }
+        };
+      
     },
 
     habilitarCamposRecomendacionLaboral: function () {
@@ -161,7 +163,6 @@ const datosRecomendacionBM = {
     },
 
     /* Proxi para manejar la lista */
-
     listadoDatosDeRecomendacion: function () {
         return {
             name: "datosRecomendacion",
@@ -221,6 +222,29 @@ const datosRecomendacionBM = {
 
     /*Fin de Proxi para manejar la lista */
 
+    /*Proxy para mantener un objeto full de Datos de Recomendacion */
+    DatosDeRecomendacionFullDto: function () {
+        return {
+            name: "datosRecomendacionDTO",
+            data: new IDatosRecomendacion,
+        }
+    },
+
+    // Crea un manejador para el Proxy
+    handlerDto: {
+        set(target, property, value) {
+            target[property] = value;
+            return true; 
+        }
+    },
+
+    // Crea el Proxy
+    proxiedDTO: function () {
+        return new Proxy(datosRecomendacionBM.DatosDeRecomendacionFullDto, datosRecomendacionBM.handlerDto)
+    },
+
+    /*Fin de Proxy para mantener un objeto full de Datos de Recomendacion */
+
     generarHeaders: function (body, req) {
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
@@ -242,13 +266,29 @@ const datosRecomendacionBM = {
         return requestOptions;
     },
 
-    crearBody: function () {
+    crearBody: function (opcion) {
+
+        if (opcion === "guardar") {
+            return JSON.stringify({
+                "nombreRecomendador": datosRecomendacionBM.txtPersona.value,
+                "telefono": datosRecomendacionBM.txtTelefono.value,
+                "tipoCarta": datosRecomendacionBM.txtTipoDeCarta.value,
+                "puesto": datosRecomendacionBM.txtTipoDeCarta.value === "2" ? datosRecomendacionBM.txtPuesto.value : "empty",
+                "empresa": datosRecomendacionBM.txtTipoDeCarta.value === "2" ? datosRecomendacionBM.txtEmpresa.value : "empty",
+            });
+        }
+
         return JSON.stringify({
+            "id": datosRecomendacionBM.DatosDeRecomendacionFullDto.data.id,
             "nombreRecomendador": datosRecomendacionBM.txtPersona.value,
             "telefono": datosRecomendacionBM.txtTelefono.value,
             "tipoCarta": datosRecomendacionBM.txtTipoDeCarta.value,
             "puesto": datosRecomendacionBM.txtTipoDeCarta.value === "2" ? datosRecomendacionBM.txtPuesto.value : "empty",
             "empresa": datosRecomendacionBM.txtTipoDeCarta.value === "2" ? datosRecomendacionBM.txtEmpresa.value : "empty",
+            "fechaCreacion": datosRecomendacionBM.DatosDeRecomendacionFullDto.data.fechaCreacion,
+            "usuarioCreacion": datosRecomendacionBM.DatosDeRecomendacionFullDto.data.usuarioCreacion,
+            "fechaModificacion": new Date(),
+            "usuarioModificacion": "Adtek"
         });
     },
 
@@ -286,14 +326,16 @@ const datosRecomendacionBM = {
 
             if (result.codigo >= 200 && result.codigo <= 299) {
                 datosRecomendacion = result.resultado;
+
+                const proxyDTO = datosRecomendacionBM.proxiedDTO();
+                proxyDTO.data = datosRecomendacion;
+
             } else {
                 alert.mostrar(datosRecomendacionBM.alertContainer, datosRecomendacionBM.cancelar, result);
             }
         } catch (error) {
             console.log("error", error);
         }
-
-        return datosRecomendacion
     },
 
     inicializar: function () {
